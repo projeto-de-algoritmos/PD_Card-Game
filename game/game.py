@@ -16,6 +16,9 @@ class Game:
         self.cards = []
         deck, self.weight = utils.fill_deck(self.num_cards)
 
+        self.player_sum = 0
+        self.player_weight = 0
+
         for i in range(self.num_cards):
             self.cards.append(Card(deck[i][0],deck[i][1], 14+33*(i%7), 14+55*(i//7)))
         
@@ -27,10 +30,15 @@ class Game:
 
         if self.gamestate == "game":
             for card in self.cards:
-                card.draw()
+                if card.update() == 1:
+                    self.player_sum += card.value
+                    self.player_weight += card.face
 
     def draw(self):
         pyxel.cls(0)
+
+        pyxel.text(5, utils.HEIGHT-10, f"Pontos: {self.player_sum}", 7)
+        pyxel.text(80, utils.HEIGHT-10, f"Peso: {self.player_weight}/{self.weight}", 7)
 
         if self.gamestate == "game":
             for card in self.cards:

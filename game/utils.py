@@ -85,11 +85,13 @@ def fill_deck(n):
     for i in range(n):
         card = random.choice(deck)
         deck.remove(card)
+        sum += card[0]
         cards.append(card)
 
     # for i in range(n):
     # cards.append(random.choices(deck, n)))
 
     weight = sum//2 + random.randint(-1*(sum//5), sum//5)
+    print(weight)
 
     return cards, weight
