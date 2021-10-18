@@ -38,6 +38,7 @@ class Game:
                 # cleaning variables
                 self.num_cards = 0
                 self.max_weight = 0
+                self.solution = -1
                 self.cards = []
                 self.sorted_cards = []
                 self.knap_table = []
@@ -93,9 +94,9 @@ class Game:
                     print(v_list)
 
                     self.knap_table = utils.knapsack(self.max_weight, w_list, v_list, self.num_cards)
-                    answer = f"RESPOSTA: {self.knap_table[self.num_cards][self.max_weight]}"
+                    self.solution = self.knap_table[self.num_cards][self.max_weight]
                     cards_ans = utils.solution_knapsack(self.knap_table, w_list, self.num_cards, self.max_weight)
-                    print(answer)
+                    print(self.solution)
                     for card in cards_ans:
                         print(self.sorted_cards[card])
 
@@ -131,6 +132,18 @@ class Game:
 
             if self.b_submit.is_on:
                 self.b_end.draw()
+
+                print(self.player_sum)
+                print(self.solution)
+
+                if self.player_sum == self.solution:
+                    print("AAAAAAAAAAAA")
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "PARABENS! VOCE VENCEU!"), utils.HEIGHT-20, "PARABENS! VOCE VENCEU!", 7)
+                elif self.player_sum == 0:
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ"), utils.HEIGHT-20, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ", 7)
+                else:
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "QUEM SABE NA PROXIMA..."), utils.HEIGHT-20, "QUEM SABE NA PROXIMA...", 7)
+
 
         elif self.gamestate == "game_over":
             self.b_end.draw()
