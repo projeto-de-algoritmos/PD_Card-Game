@@ -8,29 +8,32 @@ class Card:
     # 1 = espadas
     # 2 = copas
     # 3 = paus
-    def __init__(self, s, weight, x, y):
-        self.suit = s
+    def __init__(self, weight, suit, x, y):
+        self.suit = suit
         self.face = weight
         self.pos_x = x
         self.pos_y = y
         self.color = self.suit_color()
-        self.value = int((weight**1.5)+s)
+        self.value = int((weight**1.5)+suit)
 
     def update(self):
         ...
 
-
     def draw(self):
         pyxel.rect(self.pos_x, self.pos_y, 30, 45, 7)
 
+        #Face
         draw_face = self.draw_face()
-
         pyxel.text(self.pos_x+3, self.pos_y+3, draw_face, self.color)
-        #value
+        
         draw_x = utils.align_text(self.pos_x+25, draw_face)
         pyxel.text(draw_x, self.pos_y+37, draw_face, self.color)
+
         #Imagem do naipe
-        pyxel.blt(self.pos_x+7, self.pos_y+16, 0, self.suit*16, 0, 16, 16, 7)
+        pyxel.blt(self.pos_x+7, self.pos_y+11, 0, self.suit*16, 0, 16, 16, 7)
+
+        draw_x = utils.align_text(self.pos_x+16, f"{self.value}")
+        pyxel.text(draw_x, self.pos_y+27, f"{self.value}", 5)#self.color)
 
 
     def suit_color(self):

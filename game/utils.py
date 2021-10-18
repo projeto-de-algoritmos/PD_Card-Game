@@ -1,4 +1,5 @@
 import pyxel 
+import random
 
 WIDTH = 256
 HEIGHT = 256
@@ -69,3 +70,26 @@ def shadow_text(x, y, str, color, subcolor):
 
     pyxel.text(x, y, str, color)
 
+def fill_deck(n):
+    sum = 0
+    cards = []
+
+    deck = []
+
+    for i in range(1, 14):
+        deck.append([i, 0])
+        deck.append([i, 1])
+        deck.append([i, 2])
+        deck.append([i, 3])
+    
+    for i in range(n):
+        card = random.choice(deck)
+        deck.remove(card)
+        cards.append(card)
+
+    # for i in range(n):
+    # cards.append(random.choices(deck, n)))
+
+    weight = sum//2 + random.randint(-1*(sum//5), sum//5)
+
+    return cards, weight
