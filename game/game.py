@@ -11,28 +11,25 @@ class Game:
         pyxel.load("my_resource.pyxres") 
 
         self.gamestate = "game"
+
         self.cards = []
         self.cards.append(Card(0, 10, 40, 40))
-        self.cards.append(Card(1, 10, 200, 40))
-        self.cards.append(Card(2, 10, 40, 150))
-        self.cards.append(Card(3, 10, 200, 150))
-        self.bstart = bt.CircleButton(130, 130, "mito cria, o lixo copia", 20)
+        self.cards.append(Card(1, 1, 200, 40))
+        self.cards.append(Card(2, 13, 40, 150))
+        self.cards.append(Card(3, 8, 200, 150))
+
+        # self.bstart = bt.CircleButton(130, 130, "start", 20)
 
         pyxel.run(self.update, self.draw)
 
     def update(self):
 
-        # self.bstart.update()
-
         if self.gamestate == "game":
             for card in self.cards:
                 card.draw()
 
-
     def draw(self):
         pyxel.cls(0)
-
-        # self.bstart.draw()
 
         if self.gamestate == "game":
             for card in self.cards:

@@ -30,6 +30,12 @@ def solution_knapsack(table, weights, ati, atj):
 
     return ans
 
+def show_table(table, weight, n):
+    for i in range(0,n+1):
+        for j in range(0,weight+1):
+            print(table[i][j], end=" | ")
+        print("\n")
+
 def align_text(x, str):
     """
         Centraliza o texto
@@ -63,8 +69,3 @@ def shadow_text(x, y, str, color, subcolor):
 
     pyxel.text(x, y, str, color)
 
-# def show_table(table):
-#     for i in range(0,n+1):
-#         for j in range(0,weight+1):
-#             print(table[i][j], end=" | ")
-#         print("\n")
