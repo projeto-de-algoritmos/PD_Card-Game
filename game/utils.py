@@ -98,8 +98,7 @@ def get_max_weight(cards):
     for card in cards:
         sum += card[0]
 
-    print(sum)
-    weight = sum//2 #+ random.randint(-1*(sum//10), sum//10)
+    weight = sum//2 + random.randint(sum//10, sum//5)
 
     return weight
 

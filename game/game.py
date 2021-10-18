@@ -24,7 +24,7 @@ class Game:
         
         self.b_start = bt.CircleButton(utils.WIDTH/2, utils.HEIGHT/2, "JOGAR!", 20)
         self.b_submit = bt.RectButton(utils.WIDTH-40, 20, "CONFIRMAR", 50, 12)
-        self.b_end = bt.CircleButton(utils.WIDTH/2, utils.HEIGHT/2+50, "MENU", 20)
+        self.b_end = bt.CircleButton(utils.WIDTH/2, utils.HEIGHT/2+92, "MENU", 20)
 
         pyxel.run(self.update, self.draw)
 
@@ -46,7 +46,7 @@ class Game:
                 self.player_weight = 0
 
                 # filling variables
-                self.num_cards = random.randint(7, 14)
+                self.num_cards = 21#random.randint(7, 14)
 
                 deck = utils.fill_deck(self.num_cards)
                 self.max_weight = utils.get_max_weight(deck)
@@ -70,7 +70,7 @@ class Game:
         elif self.gamestate == "game":
 
             if self.player_weight > self.max_weight:
-                self.gamestate = "game_over"
+                self.gamestate = "overflow"
 
 
 
@@ -90,15 +90,31 @@ class Game:
                         w_list.append(card[0])
                         v_list.append(int((card[0]**1.5)+card[1]))
 
-                    print(w_list)
-                    print(v_list)
+                    # print(w_list)
+                    # print(v_list)
 
                     self.knap_table = utils.knapsack(self.max_weight, w_list, v_list, self.num_cards)
                     self.solution = self.knap_table[self.num_cards][self.max_weight]
                     cards_ans = utils.solution_knapsack(self.knap_table, w_list, self.num_cards, self.max_weight)
-                    print(self.solution)
-                    for card in cards_ans:
-                        print(self.sorted_cards[card])
+
+                    for card in self.cards:
+                        for ans_card in cards_ans:
+                            if card.face == self.sorted_cards[ans_card][0] and card.suit == self.sorted_cards[ans_card][1] :
+                                # print(f"FACE: {card.face}, SUIT: {card.suit}")
+                                if card.card_color == 6:
+                                    card.card_color = 10
+                                else:
+                                    card.card_color = 11
+                                break
+
+                            if ans_card == cards_ans[-1]:
+                                if card.card_color == 6:
+                                    card.card_color = 14
+
+                    # RESPOSTA:
+                    # print(f"SOLUTION: {self.solution}")
+                    # for card in cards_ans:
+                    #     print(self.sorted_cards[card])
 
                 self.b_end.update()
                 if self.b_end.is_on:
@@ -106,7 +122,7 @@ class Game:
                     
                     self.gamestate = "menu"
 
-        elif self.gamestate == "game_over":
+        elif self.gamestate == "overflow":
             self.b_end.update()
 
             if self.b_end.is_on:
@@ -122,30 +138,38 @@ class Game:
 
         elif self.gamestate == "game":
 
+            pyxel.line(-10, 192, utils.WIDTH+10, 192, 7)
+
             for card in self.cards:
                 card.draw()
 
             # UI
             self.b_submit.draw()
-            pyxel.text(20, 16, f"Pontos: {self.player_sum}", 7)
-            pyxel.text(108, 16, f"Peso: {self.player_weight}/{self.max_weight}", 7)
+            xpos = utils.align_text(utils.WIDTH/2, f"Pontos: {self.player_sum}")
+            pyxel.text(xpos, 16, f"PONTOS: {self.player_sum}", 7)
+            pyxel.text(20, 16, f"PESO: {self.player_weight}/{self.max_weight}", 7)
+
 
             if self.b_submit.is_on:
                 self.b_end.draw()
 
-                print(self.player_sum)
-                print(self.solution)
+                ans = f"RESPOSTA: {self.solution}"
+                xpos = utils.align_text(utils.WIDTH/2, ans)
+                pyxel.text(xpos, 5, ans, 10)
 
                 if self.player_sum == self.solution:
-                    print("AAAAAAAAAAAA")
-                    pyxel.text(utils.align_text(utils.WIDTH/2, "PARABENS! VOCE VENCEU!"), utils.HEIGHT-20, "PARABENS! VOCE VENCEU!", 7)
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "PARABENS! VOCE VENCEU!"), utils.HEIGHT-10, "PARABENS! VOCE VENCEU!", 7)
+                    xpos = utils.align_text(utils.WIDTH/2, f"Pontos: {self.player_sum}")
+                    pyxel.text(xpos, 16, f"PONTOS: {self.player_sum}", 10)
+
                 elif self.player_sum == 0:
-                    pyxel.text(utils.align_text(utils.WIDTH/2, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ"), utils.HEIGHT-20, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ", 7)
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ"), utils.HEIGHT-10, "TENTE CLICAR NAS CARTAS DA PROXIMA VEZ", 7)
                 else:
-                    pyxel.text(utils.align_text(utils.WIDTH/2, "QUEM SABE NA PROXIMA..."), utils.HEIGHT-20, "QUEM SABE NA PROXIMA...", 7)
+                    pyxel.text(utils.align_text(utils.WIDTH/2, "QUEM SABE NA PROXIMA..."), utils.HEIGHT-10, "QUEM SABE NA PROXIMA...", 7)
 
 
-        elif self.gamestate == "game_over":
+        elif self.gamestate == "overflow":
+            pyxel.text(utils.align_text(utils.WIDTH/2, "TOME CUIDADO COM O PESO DA PROXIMA VEZ!"), utils.HEIGHT-10, "TOME CUIDADO COM O PESO DA PROXIMA VEZ!", 7)
             self.b_end.draw()
         
 Game()
