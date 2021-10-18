@@ -1,3 +1,4 @@
+import random
 import pyxel
 
 import utils
@@ -9,72 +10,129 @@ class Game:
         pyxel.init(utils.WIDTH, utils.HEIGHT, caption="DP Card Game", fps=30)
         pyxel.mouse(True)      
         pyxel.load("my_resource.pyxres") 
-        self.num_cards = 18
-        self.gamestate = "game"
+        self.gamestate = "menu"
 
-        self.weight = 0
+        self.num_cards = 0
+        self.max_weight = 0
         self.cards = []
+
         self.sorted_cards = []
-        deck, self.weight = utils.fill_deck(self.num_cards)
+        self.knap_table = []
 
         self.player_sum = 0
-        self.player_weight = 0
-
-        for i in range(self.num_cards):
-            self.cards.append(Card(deck[i][0],deck[i][1], 14+33*(i%7), 35+55*(i//7)))
-
-        self.sorted_cards = deck.copy()
-        self.sorted_cards.sort(key=lambda x: (x[0], x[1]))
-
-        # print(self.cards)
-        # print(" ")
-        # print(self.sorted_cards)
-
+        self.player_weight = 0   
         
-        
-        # self.bstart = bt.CircleButton(130, 130, "start", 20)
-        self.bsubmit = bt.RectButton(utils.WIDTH-40, 20, "CONFIRMAR", 50, 12)
+        self.b_start = bt.CircleButton(utils.WIDTH/2, utils.HEIGHT/2, "JOGAR!", 20)
+        self.b_submit = bt.RectButton(utils.WIDTH-40, 20, "CONFIRMAR", 50, 12)
+        self.b_end = bt.CircleButton(utils.WIDTH/2, utils.HEIGHT/2+50, "MENU", 20)
 
         pyxel.run(self.update, self.draw)
 
     def update(self):
 
-        if self.gamestate == "game":
-            for card in self.cards:
-                if card.update() == 1:
-                    self.player_sum += card.value
-                    self.player_weight += card.face
-            self.bsubmit.update()
-            if self.bsubmit.is_on:
+        if self.gamestate == "menu":
+            self.b_start.update()
+            if self.b_start.is_on:
+                self.b_start.is_on = False
 
-                w_list = []
-                v_list = []
-                for card in self.sorted_cards:
-                    w_list.append(card[0])
-                    v_list.append(int((card[0]**1.5)+card[1]))
+                # cleaning variables
+                self.num_cards = 0
+                self.max_weight = 0
+                self.cards = []
+                self.sorted_cards = []
+                self.knap_table = []
+                self.player_sum = 0
+                self.player_weight = 0
 
-                print(w_list)
-                print(v_list)
+                # filling variables
+                self.num_cards = random.randint(7, 14)
 
-                knap_table = utils.knapsack(self.weight, w_list, v_list, self.num_cards)
-                answer = f"RESPOSTA: {knap_table[self.num_cards][self.weight]}"
-                cards_ans = utils.solution_knapsack(knap_table, w_list, self.num_cards, self.weight)
-                print(answer)
-                for card in cards_ans:
-                    print(self.sorted_cards[card])
-                # print(cards_ans)
-                self.bsubmit.is_on = False
+                deck = utils.fill_deck(self.num_cards)
+                self.max_weight = utils.get_max_weight(deck)
+
+                for i in range(self.num_cards):
+                    self.cards.append(Card(deck[i][0],deck[i][1], 14+33*(i%7), 35+55*(i//7)))
+
+                self.sorted_cards = deck.copy()
+                self.sorted_cards.sort(key=lambda x: (x[0], x[1]))   
+
+                self.player_sum = 0
+                self.player_weight = 0
+
+                # reset submit button
+                self.b_submit.is_on = False
+                self.b_submit.text = "CONFIRMAR"
+
+                self.gamestate = "game"
+
+
+        elif self.gamestate == "game":
+
+            if self.player_weight > self.max_weight:
+                self.gamestate = "game_over"
+
+
+
+            if not self.b_submit.is_on:
+                self.b_submit.update()
+
+                for card in self.cards:
+                    if card.update() == 1:
+                        self.player_sum += card.value
+                        self.player_weight += card.face
+            else:
+                if self.knap_table == []:
+                    self.b_submit.text = "CONFIRMADO"
+                    w_list = []
+                    v_list = []
+                    for card in self.sorted_cards:
+                        w_list.append(card[0])
+                        v_list.append(int((card[0]**1.5)+card[1]))
+
+                    print(w_list)
+                    print(v_list)
+
+                    self.knap_table = utils.knapsack(self.max_weight, w_list, v_list, self.num_cards)
+                    answer = f"RESPOSTA: {self.knap_table[self.num_cards][self.max_weight]}"
+                    cards_ans = utils.solution_knapsack(self.knap_table, w_list, self.num_cards, self.max_weight)
+                    print(answer)
+                    for card in cards_ans:
+                        print(self.sorted_cards[card])
+
+                self.b_end.update()
+                if self.b_end.is_on:
+                    self.b_end.is_on = False
+                    
+                    self.gamestate = "menu"
+
+        elif self.gamestate == "game_over":
+            self.b_end.update()
+
+            if self.b_end.is_on:
+                self.b_end.is_on = False
+                
+                self.gamestate = "menu"
 
     def draw(self):
         pyxel.cls(0)
 
+        if self.gamestate == "menu":
+            self.b_start.draw()
 
-        pyxel.text(20, 16, f"Pontos: {self.player_sum}", 7)
-        pyxel.text(108, 16, f"Peso: {self.player_weight}/{self.weight}", 7)
+        elif self.gamestate == "game":
 
-        if self.gamestate == "game":
-            self.bsubmit.draw()
             for card in self.cards:
                 card.draw()
+
+            # UI
+            self.b_submit.draw()
+            pyxel.text(20, 16, f"Pontos: {self.player_sum}", 7)
+            pyxel.text(108, 16, f"Peso: {self.player_weight}/{self.max_weight}", 7)
+
+            if self.b_submit.is_on:
+                self.b_end.draw()
+
+        elif self.gamestate == "game_over":
+            self.b_end.draw()
         
 Game()

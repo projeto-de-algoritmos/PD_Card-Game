@@ -11,6 +11,8 @@ class Button:
         self.text = text
         self.offset = 4
         self.is_on = False
+        self.color = 0
+        self.subcolor = 0
 
     def update(self):
         """Atualiza o estado do botão"""
@@ -24,6 +26,8 @@ class CircleButton(Button):
     def __init__(self, x, y, text, r):
         super().__init__(x, y, text)
         self.radius = r
+        self.color = 12
+        self.subcolor = 5
         
     def update(self):
         mouse_pos = [pyxel.mouse_x, pyxel.mouse_y]
@@ -46,8 +50,8 @@ class CircleButton(Button):
 
 
     def draw(self):
-        pyxel.circ(self.posx, self.posy, self.radius, 5)
-        pyxel.circ(self.posx, self.posy-self.offset, self.radius, 12)
+        pyxel.circ(self.posx, self.posy, self.radius, self.subcolor)
+        pyxel.circ(self.posx, self.posy-self.offset, self.radius, self.color)
 
         if self.is_on: txt_color = 8
         else: txt_color = 7
@@ -59,6 +63,8 @@ class RectButton(Button):
         super().__init__(x, y, text)
         self.width = w
         self.height = h
+        self.color = 12
+        self.subcolor = 5
         
     def update(self):
 
@@ -79,21 +85,21 @@ class RectButton(Button):
         
 
     def draw(self):
-        pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width+self.offset, self.height+self.offset, 5)
-        pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width, self.height, 12)
+        pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width+self.offset, self.height+self.offset, self.subcolor)
+        pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width, self.height, self.color)
 
         pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
-        # pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
-        # pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
+        pyxel.pset(self.posx-(self.width/2)-self.offset+1, self.posy+(self.height/2)-1, 0)
+        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-2, 0)
 
         pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
-        # pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
-        # pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
+        pyxel.pset(self.posx+(self.width/2)-2, self.posy-(self.height/2)-self.offset, 0)
+        pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset+1, 0)
 
         if self.is_on: txt_color = 8
         else: txt_color = 7
 
-        pyxel.text(align_text(self.posx-5, self.text), self.posy-self.offset-2, self.text, txt_color)
+        pyxel.text(align_text(self.posx, self.text)-self.offset, self.posy-self.offset-2, self.text, txt_color)
 
 class PushButton(Button):
     def __init__(self, x, y, text, r):

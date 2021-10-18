@@ -76,9 +76,7 @@ def shadow_text(x, y, str, color, subcolor):
     pyxel.text(x, y, str, color)
 
 def fill_deck(n):
-    sum = 0
     cards = []
-
     deck = []
 
     for i in range(1, 14):
@@ -90,9 +88,18 @@ def fill_deck(n):
     for i in range(n):
         card = random.choice(deck)
         deck.remove(card)
-        sum += card[0]
         cards.append(card)
 
-    weight = sum//2 + random.randint(-1*(sum//5), sum//5)
+    return cards
 
-    return cards, weight
+def get_max_weight(cards):
+
+    sum = 0
+    for card in cards:
+        sum += card[0]
+
+    print(sum)
+    weight = sum//2 #+ random.randint(-1*(sum//10), sum//10)
+
+    return weight
+
