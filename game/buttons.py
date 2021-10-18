@@ -82,10 +82,18 @@ class RectButton(Button):
         pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width+self.offset, self.height+self.offset, 5)
         pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width, self.height, 12)
 
+        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
+        # pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
+        # pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
+
+        pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
+        # pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
+        # pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
+
         if self.is_on: txt_color = 8
         else: txt_color = 7
 
-        pyxel.text(align_text(self.posx, self.text), self.posy-self.offset-2, self.text, txt_color)
+        pyxel.text(align_text(self.posx-5, self.text), self.posy-self.offset-2, self.text, txt_color)
 
 class PushButton(Button):
     def __init__(self, x, y, text, r):

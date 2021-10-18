@@ -3,11 +3,16 @@ import random
 
 WIDTH = 256
 HEIGHT = 256
+table = []
 
-def knapsack(table ,weight, weights, values, n):
-
+        
+def knapsack(max_w, weights, values, n):    
+    table = [[0 for _ in range(max_w+1)]for _ in range(n+1)] 
+    
     for i in range(n + 1):
-        for weight in range(weight + 1):
+        for weight in range(max_w + 1):
+            # print(f"i:{i}")
+            # print(f"w:{weight}")
             if i == 0 or weight == 0:
                 table[i][weight] = 0
             elif weights[i-1] <= weight:
@@ -17,7 +22,7 @@ def knapsack(table ,weight, weights, values, n):
             else:
                 table[i][weight] = table[i-1][weight]
  
-    return table[n][weight]
+    return table
 
 def solution_knapsack(table, weights, ati, atj):
     ans = []
@@ -77,10 +82,10 @@ def fill_deck(n):
     deck = []
 
     for i in range(1, 14):
-        deck.append([i, 0])
-        deck.append([i, 1])
-        deck.append([i, 2])
-        deck.append([i, 3])
+        deck.append((i, 0))
+        deck.append((i, 1))
+        deck.append((i, 2))
+        deck.append((i, 3))
     
     for i in range(n):
         card = random.choice(deck)
@@ -88,10 +93,6 @@ def fill_deck(n):
         sum += card[0]
         cards.append(card)
 
-    # for i in range(n):
-    # cards.append(random.choices(deck, n)))
-
     weight = sum//2 + random.randint(-1*(sum//5), sum//5)
-    print(weight)
 
     return cards, weight
