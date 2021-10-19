@@ -11,8 +11,6 @@ def knapsack(max_w, weights, values, n):
     
     for i in range(n + 1):
         for weight in range(max_w + 1):
-            # print(f"i:{i}")
-            # print(f"w:{weight}")
             if i == 0 or weight == 0:
                 table[i][weight] = 0
             elif weights[i-1] <= weight:

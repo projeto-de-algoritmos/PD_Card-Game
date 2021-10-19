@@ -3,11 +3,13 @@ import pyxel
 import utils
 
 class Card:
+    
     # suit = naipe
     # 0 = ouros 
     # 1 = espadas
     # 2 = copas
     # 3 = paus
+
     def __init__(self, weight, suit, x, y):
         self.suit = suit
         self.face = weight
