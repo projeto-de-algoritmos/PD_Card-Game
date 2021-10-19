@@ -88,12 +88,12 @@ class RectButton(Button):
         pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width+self.offset, self.height+self.offset, self.subcolor)
         pyxel.rect(self.posx-(self.width/2)-self.offset, self.posy-(self.height/2)-self.offset, self.width, self.height, self.color)
 
-        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1, 0)
+        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-1,   0)
         pyxel.pset(self.posx-(self.width/2)-self.offset+1, self.posy+(self.height/2)-1, 0)
-        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-2, 0)
+        pyxel.pset(self.posx-(self.width/2)-self.offset, self.posy+(self.height/2)-2,   0)
 
-        pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset, 0)
-        pyxel.pset(self.posx+(self.width/2)-2, self.posy-(self.height/2)-self.offset, 0)
+        pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset,   0)
+        pyxel.pset(self.posx+(self.width/2)-2, self.posy-(self.height/2)-self.offset,   0)
         pyxel.pset(self.posx+(self.width/2)-1, self.posy-(self.height/2)-self.offset+1, 0)
 
         if self.is_on: txt_color = 8
